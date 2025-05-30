@@ -1,0 +1,30 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: reference-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pv-public.pem
+          iss: 1
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ps_references
+    password: ps_references
+    hikari:
+      maximum-pool-size: 10
+  flyway:
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: ps_references
+    password: ps_references
+
+
+core:
+  config:
+    security:
+      security-props:
+        path: classpath:application-access.yaml

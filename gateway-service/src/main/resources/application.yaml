@@ -1,0 +1,83 @@
+server:
+  port: 10000
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            maxAge: 86400
+            allowedHeaders:
+              - Origin
+              - X-Requested-With
+              - Content-Type
+              - Accept
+              - Authorization
+              - User-App
+              - Space
+            exposedHeaders:
+              - Content-Dispositio
+              - Access-Control-Allow-Origin
+      routes:
+        - id: auth-server
+          uri: http://localhost:10001
+          predicates:
+            - Path=/auth/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth/v1(?<segment>/?.*), $\{segment}
+            - name: StoreAuthRequest
+
+        - id: references-service
+          uri: http://localhost:9000
+          predicates:
+            - Path=/references/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/references/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthRequestHeader
+
+        - id: project-service
+          uri: http://localhost:9001
+          predicates:
+            - Path=/projects/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/projects/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthRequestHeader
+
+        - id: tasks-service
+          uri: http://localhost:9002
+          predicates:
+            - Path=/tasks/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/tasks/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthRequestHeader
+
+        - id: repository-service
+          uri: http://localhost:9004
+          predicates:
+            - Path=/repositories/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/repositories/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthRequestHeader
+
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

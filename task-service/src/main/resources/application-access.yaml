@@ -1,0 +1,43 @@
+security-props:
+  space-matchers:
+    - method: GET
+      path: /tasks/**
+      access: VIEW_TASKS
+
+    - method: POST
+      path: /tasks/**
+      access: ADD_TASKS
+
+  privileges:
+    MAINTAINER:
+      - VIEW_PROJECT
+      - ADD_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_SPACE
+      - ADD_SPACE
+    DEVELOPER:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+      - ADD_SPACE
+    TESTER:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+    ANALYST:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+    PROJECT_MANAGER:
+      - VIEW_PROJECT
+      - ADD_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_SPACE
+      - ADD_SPACE

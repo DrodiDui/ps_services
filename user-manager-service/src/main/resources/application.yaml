@@ -1,0 +1,73 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: user-manager-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pv-public.pem
+          iss: 1
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ps_auth
+    password: ps_auth
+    hikari:
+      maximum-pool-size: 10
+  flyway:
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: ps_auth
+    password: ps_auth
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:9092
+      transaction-id-prefix: ${spring.application.name}-tx.
+      properties.spring.json.add.type.headers: true
+      ack: -1
+    consumer:
+      bootstrap-servers: localhost:9092
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 2
+      properties:
+        isolation.level: read_committed
+        spring.json.trusted.packages: 'com.kapitonau.projectstudio.event'
+    listener:
+      ack-mode: manual_immediate
+    properties:
+      max.block.ms: 7000
+
+
+core:
+  config:
+    security:
+      security-props:
+        path: classpath:application-access.yaml
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+api:
+  reference-service:
+    url: http://localhost:9000
+
+
+kafka:
+  topic:
+    user-add-event:
+      name: user-add-event
+    user-add-to-space-event:
+      name: user-add-to-space
+      groupId: user-add-to-space_groupId
+      sleepTimeMs: 60000

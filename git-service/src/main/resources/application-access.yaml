@@ -1,0 +1,25 @@
+security-props:
+  spaceMatchers:
+    - method: GET
+      path: /repositories/**
+      access: VIEW_REPOSITORY
+
+    - method: GET
+      path: /branches/**
+      access: VIEW_BRANCHES
+
+    - method: POST
+      path: /branches/**
+      access: ADD_BRANCHES
+
+    - method: GET
+      path: /commits/**
+      access: VIEW_COMMITS
+
+    - method: POST
+      path: /get/contents/
+      access: VIEW_CONTENT
+
+  matchers:
+
+  ignoring:

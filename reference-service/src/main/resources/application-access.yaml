@@ -1,0 +1,21 @@
+security-props:
+  #matchers:
+  #  - method: GET
+  #    path: /references/**
+  #    access: VIEW_REFERENCE
+#
+  ignoring:
+    - method: GET
+      path: /references/items
+
+  privileges:
+    MAINTAINER:
+      - VIEW_REFERENCE
+    DEVELOPER:
+      - VIEW_REFERENCE
+    TESTER:
+      - VIEW_REFERENCE
+    ANALYST:
+      - VIEW_REFERENCE
+    PROJECT_MANAGER:
+      - VIEW_REFERENCE

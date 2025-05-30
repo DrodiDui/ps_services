@@ -1,0 +1,72 @@
+security-props:
+  spaceMatchers:
+    - method: GET
+      path: /projects/**
+      access: VIEW_PROJECT
+
+    - method: POST
+      path: /projects/**
+      access: ADD_PROJECT
+
+    - method: GET
+      path: /employees/**
+      access: VIEW_EMPLOYEES
+
+    - method: POST
+      path: /employees/space
+      access: ADD_EMPLOYEE_TO_PROJECT
+
+  matchers:
+
+    - method: GET
+      path: /spaces/**
+      access: VIEW_SPACE
+
+    - method: POST
+      path: /spaces/**
+      access: ADD_SPACE
+
+
+  privileges:
+    MAINTAINER:
+      - VIEW_PROJECT
+      - ADD_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_SPACE
+      - ADD_SPACE
+      - ADD_TASKS
+      - GET_TASKS
+    DEVELOPER:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+      - ADD_SPACE
+      - ADD_TASKS
+      - GET_TASKS
+    TESTER:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+      - ADD_TASKS
+      - GET_TASKS
+    ANALYST:
+      - VIEW_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - VIEW_SPACE
+      - ADD_TASKS
+      - GET_TASKS
+    PROJECT_MANAGER:
+      - VIEW_PROJECT
+      - ADD_PROJECT
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_EMPLOYEES
+      - ADD_EMPLOYEE_TO_PROJECT
+      - VIEW_SPACE
+      - ADD_SPACE
+      - ADD_TASKS
+      - GET_TASKS
