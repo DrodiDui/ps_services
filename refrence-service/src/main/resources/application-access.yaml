@@ -1,0 +1,16 @@
+security-props:
+  spaceMatchers:
+
+
+  matchers:
+    - method: GET
+      path: /references/items/**
+      access: REFERENCE_ITEM_READ
+
+  ignoring:
+
+  basic-matchers:
+    - method: GET
+      path: /references/items?referenceType=MEMBER_POSITION
+      username: demo-client
+      password: demo-client

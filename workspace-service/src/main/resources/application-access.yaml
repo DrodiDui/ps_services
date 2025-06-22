@@ -1,0 +1,10 @@
+security-props:
+  spaceMatchers:
+
+
+  matchers:
+    - method: POST
+      path: /WORKSPACES/**
+      access: WRITE_WORKSPACE
+
+  ignoring:

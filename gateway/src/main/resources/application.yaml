@@ -1,0 +1,94 @@
+server:
+  port: 10000
+
+spring:
+  application:
+    name: gateway-service
+  #redis:
+  #  host: localhost
+  #  port: 6379
+  #  database: 0
+  #  timeout: 5000
+  #  lettuce:
+  #    pool:
+  #      max-active: 8
+  #      max-idle: 8
+  #      min-idle: 1
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            maxAge: 86400
+            allowedHeaders:
+              - Origin
+              - X-Requested-With
+              - Content-Type
+              - Accept
+              - Authorization
+              - User-App
+              - Space
+              - workspaceId
+            exposedHeaders:
+              - Content-Dispositio
+              - Access-Control-Allow-Origin
+      routes:
+        - id: auth-server
+          uri: http://localhost:10001
+          predicates:
+            - Path=/auth/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth/v1(?<segment>/?.*), $\{segment}
+            - name: StoreAuthRequest
+
+        - id: workspace-service
+          uri: http://localhost:9001
+          predicates:
+            - Path=/workspaces/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/workspaces/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthorizationToken
+
+        - id: aggregates-server
+          uri: http://localhost:9010
+          predicates:
+            - Path=/aggregates/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/aggregates/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthorizationToken
+
+        - id: reference-server
+          uri: http://localhost:9000
+          predicates:
+            - Path=/references/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/references/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthorizationToken
+
+        - id: reference-server
+          uri: http://localhost:9003
+          predicates:
+            - Path=/tasks/v1/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/tasks/v1(?<segment>/?.*), $\{segment}
+            - name: RewriteAuthorizationToken
+
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

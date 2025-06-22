@@ -1,0 +1,64 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: workspace-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pv-public.pem
+          iss: 1
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ps_workspace
+    password: ps_workspace
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: ps_workspace
+    password: ps_workspace
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:9092
+      transaction-id-prefix: ${spring.application.name}-tx.
+      properties.spring.json.add.type.headers: true
+      ack: -1
+    consumer:
+      bootstrap-servers: localhost:9092
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 2
+      properties:
+        isolation.level: read_committed
+        spring.json.trusted.packages: 'com.kapitonau.ps.apirequestlib.kafka'
+    listener:
+      ack-mode: manual_immediate
+    properties:
+      max.block.ms: 7000
+
+kafka-topics:
+  model-event:
+    name: model-event
+  project-create-event:
+    name: project-create-event
+    groupId: default_project-create-event_groupId
+
+
+core:
+  config:
+    security:
+      security-props:
+        path: classpath:application-access.yaml
+
+
+api:
+  reference-service:
+    url: http://localhost:9000

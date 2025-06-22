@@ -1,0 +1,20 @@
+security-props:
+  spaceMatchers:
+    - method: GET
+      path: /tasks/**
+      access: TASKS_READ
+
+    - method: GET
+      path: /projects/**
+      access: PROJECT_READ
+
+    - method: GET
+      path: /tasks/statusGroup
+      access: TASKS_READ
+
+  matchers:
+    - method: POST
+      path: /workspaces/**
+      access: WRITE_WORKSPACE
+
+  ignoring:

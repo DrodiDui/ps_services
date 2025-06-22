@@ -1,0 +1,10 @@
+security-props:
+  spaceMatchers:
+    - method: POST
+      path: /tasks/**
+      access: TASKS_WRITE
+
+  matchers:
+
+
+  ignoring:

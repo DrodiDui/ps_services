@@ -1,0 +1,1 @@
+alter table reference_metadata add column metadata_name character varying not null;

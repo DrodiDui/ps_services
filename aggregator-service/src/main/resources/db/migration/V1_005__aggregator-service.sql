@@ -1,0 +1,1 @@
+alter table tasks add column task_type_id bigint not null;
