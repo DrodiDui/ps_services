@@ -77,4 +77,16 @@ class BaseProjectService(
 
         return EmptyDto()
     }
+
+    override fun getProjectById(projectId: Long): ProjectResponse {
+        return projectRepository.findById(projectId)
+            .map { it -> ProjectResponse(
+                it.projectId,
+                it.projectTitle,
+                it.description,
+                it.createdDate,
+                referenceCache.getReferenceItemById(it.projectTypeId)
+            ) }
+            .orElseThrow { CommonServiceException("WORKSPACE_SERVICE", "Project not found") }
+    }
 }

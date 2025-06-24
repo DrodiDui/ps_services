@@ -8,4 +8,6 @@ interface CustomMemberRepository {
 
     fun getAllMembers(offset: Int, limit: Int): List<AggregateMemberResponse>
 
+    fun getAllAvailableMembersByWorkspaceId(workspaceId: Long?): List<AggregateMemberResponse>
+
 }

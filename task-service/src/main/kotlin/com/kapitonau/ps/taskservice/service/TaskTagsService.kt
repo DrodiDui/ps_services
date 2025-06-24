@@ -5,5 +5,6 @@ import org.springframework.stereotype.Service
 interface TaskTagsService {
 
     fun addTagsToTask(taskId: Long, tags: List<Long>, workspaceId: Long)
+    fun deleteByTaskId(taskId: Long)
 
 }

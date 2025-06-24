@@ -49,4 +49,37 @@ class BaseWorkspaceService(
 
         return workspaceMapper.toDto(model)
     }
+
+    override fun createWorkspaceWithOwner(
+        body: WorkspacePostRequest,
+        ownerId: Long
+    ): WorkspaceResponse {
+        workspaceRepository.findByWorkspaceName(body.workspaceName)
+            .ifPresent {
+                throw CommonServiceException(
+                    "WORKSPACE_ERROR",
+                    messageSource.getMessage("WORKSPACE_1", arrayOf(body.workspaceName), getLocale())
+                )
+            }
+
+        var model = workspaceMapper.toModel(body, ownerId)
+        model = workspaceRepository.save(model)
+
+        modelEventSender.send(
+            ModelEventDto(
+                ModelType.WORKSPACE_MODEL,
+                eventDtoConverter.toMap(model)
+            )
+        )
+
+        return workspaceMapper.toDto(model)
+    }
+
+    override fun getWorkspaceById(workspaceId: Long): WorkspaceResponse {
+        return workspaceRepository.findById(workspaceId)
+            .map { it -> workspaceMapper.toDto(it) }
+            .orElseThrow { CommonServiceException("WORKSPACE_SERVICE", "Workspace not found") }
+    }
+
+
 }

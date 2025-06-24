@@ -4,6 +4,7 @@ import com.kapitonau.ps.aggregatorservice.repository.ProjectRepository
 import com.kapitonau.ps.aggregatorservice.service.ProjectService
 import com.kapitonau.ps.apirequestlib.bean.cache.ReferenceCache
 import com.kapitonau.ps.apirequestlib.common.workspaces.ProjectResponse
+import com.kapitonau.ps.commonspringlib.exception.CommonServiceException
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,5 +25,22 @@ class BaseProjectService(
                 )
              }
             .toList()
+    }
+
+    override fun getProjectByWorkspace(
+        workspaceId: Long,
+        projectId: Long
+    ): ProjectResponse {
+
+        val project = projectRepository.findByWorkspaceIdAndProjectId(workspaceId, projectId)
+            .orElseThrow { CommonServiceException("AGGREGATOR_SERVICE", "Project not found") }
+
+        return ProjectResponse(
+            project.projectId,
+            project.projectTitle,
+            project.description,
+            project.createdDate,
+            referenceCache.getReferenceItemById(project.projectTypeId)
+        )
     }
 }

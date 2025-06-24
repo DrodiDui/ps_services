@@ -10,9 +10,9 @@ class BaseAuditModelListener {
 
     @PrePersist
     fun prePersist(auditModel: BaseAuditModel) {
-        auditModel.createdDate = ZonedDateTime.now()
-        auditModel.createdBy = ResourceSecurityUtil.getUserId()
-        auditModel.version = ResourceSecurityUtil.getUserId()
+        if (auditModel.createdDate == null) auditModel.createdDate = ZonedDateTime.now()
+        if (auditModel.createdBy == null) auditModel.createdBy =  ResourceSecurityUtil.getUserId()
+        if (auditModel.version == null) auditModel.version = 1
     }
 
     @PreUpdate

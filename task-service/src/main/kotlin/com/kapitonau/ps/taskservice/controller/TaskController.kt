@@ -1,5 +1,6 @@
 package com.kapitonau.ps.taskservice.controller
 
+import com.kapitonau.ps.apirequestlib.common.EmptyDto
 import com.kapitonau.ps.apirequestlib.common.tasks.TaskResponse
 import com.kapitonau.ps.apirequestlib.tasks.api.TaskApi
 import com.kapitonau.ps.apirequestlib.tasks.dto.TaskPostRequest
@@ -16,4 +17,8 @@ class TaskController(
 
     override fun changeTaskStatus(taskId: Long, body: TaskStatusPutRequest): TaskResponse =
         taskService.changeTaskStatus(taskId, body)
+
+    override fun deleteTask(taskId: Long): EmptyDto {
+        return taskService.deleteTask(taskId);
+    }
 }

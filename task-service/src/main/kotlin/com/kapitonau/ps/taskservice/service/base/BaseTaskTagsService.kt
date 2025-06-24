@@ -44,5 +44,9 @@ class BaseTaskTagsService(
         )
 
     }
-    
+
+    override fun deleteByTaskId(taskId: Long) {
+        taskTagRepository.deleteAllByTaskId(taskId)
+    }
+
 }

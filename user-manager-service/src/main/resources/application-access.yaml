@@ -1,0 +1,13 @@
+security-props:
+  spaceMatchers:
+
+  matchers:
+
+
+  ignoring:
+
+  basic-matchers:
+    - method: POST
+      path: /registration/self
+      username: demo-client
+      password: demo-client

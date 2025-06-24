@@ -7,4 +7,7 @@ interface WorkspaceService {
 
     fun createWorkspace(body: WorkspacePostRequest): WorkspaceResponse
 
+    fun createWorkspaceWithOwner(body: WorkspacePostRequest, ownerId: Long): WorkspaceResponse
+    fun getWorkspaceById(workspaceId: Long): WorkspaceResponse
+
 }

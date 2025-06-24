@@ -44,6 +44,9 @@ spring:
     properties:
       max.block.ms: 7000
 
+  cache:
+    type: caffeine
+
 kafka-topics:
   model-event:
     name: model-event

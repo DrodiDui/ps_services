@@ -19,4 +19,8 @@ class ProjectRestController(
     override fun deleteProject(projectId: Long): EmptyDto {
         return projectService.deleteProject(projectId)
     }
+
+    override fun getProject(projectId: Long): ProjectResponse {
+        return projectService.getProjectById(projectId)
+    }
 }

@@ -20,7 +20,7 @@ class AggregateMemberController(
     }
 
     override fun getAvailableMembers(workspaceId: Long?): List<AggregateMemberResponse?>? {
-        TODO("Not yet implemented")
+        return memberService.getAvailableMembers(workspaceId)
     }
 
 

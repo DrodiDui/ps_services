@@ -1,6 +1,7 @@
 package com.kapitonau.ps.taskservice.service.base
 
 import com.kapitonau.ps.apirequestlib.bean.cache.ReferenceCache
+import com.kapitonau.ps.apirequestlib.common.EmptyDto
 import com.kapitonau.ps.apirequestlib.common.tasks.TagResponse
 import com.kapitonau.ps.apirequestlib.common.tasks.TaskResponse
 import com.kapitonau.ps.apirequestlib.kafka.ModelEventDto
@@ -9,22 +10,16 @@ import com.kapitonau.ps.apirequestlib.kafka.ModelType
 import com.kapitonau.ps.apirequestlib.tasks.dto.TaskPostRequest
 import com.kapitonau.ps.apirequestlib.tasks.dto.TaskStatusPutRequest
 import com.kapitonau.ps.commonspringlib.exception.CommonServiceException
-import com.kapitonau.ps.commonspringlib.security.ResourceSecurityUtil
 import com.kapitonau.ps.taskservice.event.sender.ModelEventSender
 import com.kapitonau.ps.taskservice.model.ProjectTaskCounterModel
 import com.kapitonau.ps.taskservice.model.TaskModel
-import com.kapitonau.ps.taskservice.model.TaskTagModel
-import com.kapitonau.ps.taskservice.model.TaskTagModelId
+import com.kapitonau.ps.taskservice.model.mapper.TaskMapper
 import com.kapitonau.ps.taskservice.repository.ProjectTaskCounterRepository
-import com.kapitonau.ps.taskservice.repository.TagRepository
 import com.kapitonau.ps.taskservice.repository.TaskRepository
-import com.kapitonau.ps.taskservice.repository.TaskTagRepository
 import com.kapitonau.ps.taskservice.service.TaskService
 import com.kapitonau.ps.taskservice.service.TaskTagsService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.ZonedDateTime
-import kotlin.math.min
 
 @Service
 class BaseTaskService(
@@ -33,39 +28,19 @@ class BaseTaskService(
     private val referenceCache: ReferenceCache,
     private val taskTagService: TaskTagsService,
     private val modelEventSender: ModelEventSender,
-    private val modelEventDtoConverter: ModelEventDtoConverter
+    private val modelEventDtoConverter: ModelEventDtoConverter,
+    private val taskMapper: TaskMapper,
 ) : TaskService {
 
 
     @Transactional(transactionManager = "taskTransactionManager")
     override fun createTask(body: TaskPostRequest): TaskResponse {
 
-        val currentUser = ResourceSecurityUtil.getUserId()
-
         val counter = projectTaskCounterRepository.findById(body.projectId)
             .orElseThrow { CommonServiceException("TASKS_SERVICE", "Project counter not found") }
 
-        var model = TaskModel()
+        var model = taskMapper.toModel(body)
         model.taskName = "TASK-${body.workspaceId}${counter.projectId}-${counter.counter}"
-        model.taskTitle = body.title
-        model.description = body.description
-        model.ownerId = currentUser
-        if (body.assigneeId == null) {
-            model.assigneeId = currentUser
-        } else {
-            model.assigneeId = body.assigneeId
-        }
-        model.taskStatusId =
-            referenceCache.getReferenceItemByTypeAndCode("TASK_STATUS", body.taskStatusCode).referenceItemId
-        model.taskPriorityId =
-            referenceCache.getReferenceItemByTypeAndCode("TASK_PRIORITY", body.taskPriorityCode).referenceItemId
-        model.createdDate = ZonedDateTime.now()
-        model.createdBy = currentUser
-        model.lastModifiedDate = ZonedDateTime.now()
-        model.lastModifiedBy = currentUser
-        model.projectId = body.projectId
-        model.taskTypeId = referenceCache.getReferenceItemByTypeAndCode("TASK_TYPE", body.taskTypeCode).referenceItemId
-        model.workspaceId = body.workspaceId
 
         model = taskRepository.save<TaskModel>(model)
 
@@ -81,23 +56,9 @@ class BaseTaskService(
             modelEventDtoConverter.toMap(model)
         ))
 
-        return TaskResponse(
-            model.taskId,
-            model.taskName,
-            model.taskTitle,
-            model.description,
-            referenceCache.getReferenceItemById(model.taskStatusId),
-            referenceCache.getReferenceItemById(model.taskPriorityId),
-            referenceCache.getReferenceItemById(model.taskTypeId),
-            null,
-            null,
-            null,
-            null,
-            model.createdDate,
-            model.lastModifiedDate,
-            listOf<TagResponse>()
-        )
+        return taskMapper.toResponse(model)
     }
+
 
     @Transactional(transactionManager = "taskTransactionManager")
     override fun changeTaskStatus(
@@ -118,22 +79,17 @@ class BaseTaskService(
             modelEventDtoConverter.toMap(task)
         ))
 
-        return TaskResponse(
-            task.taskId,
-            task.taskName,
-            task.taskTitle,
-            task.description,
-            referenceCache.getReferenceItemById(task.taskStatusId),
-            referenceCache.getReferenceItemById(task.taskPriorityId),
-            referenceCache.getReferenceItemById(task.taskTypeId),
-            null,
-            null,
-            null,
-            null,
-            task.createdDate,
-            task.lastModifiedDate,
-            listOf<TagResponse>()
-        )
+        return taskMapper.toResponse(task)
+    }
+
+    @Transactional(transactionManager = "taskTransactionManager")
+    override fun deleteTask(taskId: Long): EmptyDto {
+        val task = taskRepository.findById(taskId)
+            .orElseThrow { CommonServiceException("TASKS_SERVICE", "Task not found") }
+        taskTagService.deleteByTaskId(taskId)
+
+        taskRepository.delete(task)
+        return EmptyDto()
     }
 }
 

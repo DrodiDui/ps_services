@@ -14,4 +14,8 @@ class WorkspaceRestController(
     override fun createWorkspace(body: WorkspacePostRequest): WorkspaceResponse {
         return workspaceService.createWorkspace(body)
     }
+
+    override fun getWorkspace(workspaceId: Long): WorkspaceResponse {
+        return workspaceService.getWorkspaceById(workspaceId)
+    }
 }

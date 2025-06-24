@@ -14,7 +14,12 @@ import org.springframework.context.annotation.ComponentScan
         "com.kapitonau.ps.apirequestlib.bean"
     ]
 )
-@EnableFeignClients(basePackages = ["com.kapitonau.ps.apirequestlib.bean.client"])
+@EnableFeignClients(
+    basePackages = [
+        "com.kapitonau.ps.apirequestlib.bean.client",
+        "com.kapitonau.ps.taskservice.client"
+    ]
+)
 class TaskServiceApplication
 
 fun main(args: Array<String>) {

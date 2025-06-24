@@ -12,4 +12,9 @@ class AggregateProjectController(
 
     override fun getAvailableProjects(workspaceId: String): List<ProjectResponse> =
         projectService.getAvailableProjects(workspaceId.toLong())
+
+    override fun getProject(
+        workspaceId: Long,
+        projectId: Long
+    ): ProjectResponse? = projectService.getProjectByWorkspace(workspaceId, projectId)
 }
