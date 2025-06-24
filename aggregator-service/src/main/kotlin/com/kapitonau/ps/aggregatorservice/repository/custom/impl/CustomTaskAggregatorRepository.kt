@@ -87,7 +87,8 @@ where w.workspace_id = :workspaceId
        ta.member_role_id as assigneePositionId,
        ta.member_status_id as assigneeStatusId,
        t.created_date       as creadedDate,
-       t.last_modified_date as lastModifiedDate
+       t.last_modified_date as lastModifiedDate,
+       p.git_provider_id as gitProviderId,
 from tasks t
          join projects p on p.project_id = t.project_id
          join workspaces w on w.workspace_id = t.workspace_id and w.workspace_id = p.workspace_id
@@ -136,7 +137,8 @@ where w.workspace_id = :workspaceId
                 row[8] as String,
                 row[9] as String,
                 ZonedDateTime.ofInstant(row[10] as Instant, ZoneId.systemDefault()),
-                referenceCache.getReferenceItemById(row[11] as Long)
+                referenceCache.getReferenceItemById(row[11] as Long),
+                if (row[34] !== null) referenceCache.getReferenceItemById(row[34] as Long) else null,
             ),
             WorkspaceResponse(
                 row[12] as Long,

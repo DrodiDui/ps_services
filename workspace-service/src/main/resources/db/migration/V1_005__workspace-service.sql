@@ -1,0 +1,1 @@
+alter table projects add column git_provider_id bigint null;

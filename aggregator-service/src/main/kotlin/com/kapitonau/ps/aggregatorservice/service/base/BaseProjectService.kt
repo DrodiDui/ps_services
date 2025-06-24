@@ -21,7 +21,8 @@ class BaseProjectService(
                     it.projectTitle,
                     it.description,
                     it.createdDate,
-                    referenceCache.getReferenceItemById(it.projectTypeId)
+                    referenceCache.getReferenceItemById(it.projectTypeId),
+                    if (it.gitProviderId != null) referenceCache.getReferenceItemById(it.gitProviderId) else null,
                 )
              }
             .toList()
@@ -40,7 +41,8 @@ class BaseProjectService(
             project.projectTitle,
             project.description,
             project.createdDate,
-            referenceCache.getReferenceItemById(project.projectTypeId)
+            referenceCache.getReferenceItemById(project.projectTypeId),
+            if (project.gitProviderId != null) referenceCache.getReferenceItemById(project.gitProviderId) else null,
         )
     }
 }

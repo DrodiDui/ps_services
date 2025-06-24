@@ -54,6 +54,9 @@ kafka-topics:
     groupId: default_member-create-event_groupId
   user-workspace-role-event:
     name: user-workspace-role-event
+  git-create-event:
+    name: git-create-event
+
 
 
 core:

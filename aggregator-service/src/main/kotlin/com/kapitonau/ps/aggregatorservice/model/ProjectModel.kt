@@ -39,4 +39,7 @@ open class ProjectModel {
 
     @Column(name = "is_deleted", nullable = false)
     open var isDeleted: Boolean? = null
+
+    @Column(name = "git_provider_id", nullable = true)
+    open var gitProviderId: Long? = null
 }

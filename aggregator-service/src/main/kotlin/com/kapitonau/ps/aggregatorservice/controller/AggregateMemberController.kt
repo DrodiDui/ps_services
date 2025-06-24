@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 class AggregateMemberController(
     private val memberService: MemberService
 ): AggregateMemberApi {
+
     override fun getAllMembers(
         offset: Long,
         limit: Long
