@@ -68,7 +68,7 @@ class BaseProjectService(
             projectModel.description,
             projectModel.createdDate,
             referenceCache.getReferenceItemById(projectModel.projectTypeId),
-            referenceCache.getReferenceItemById(projectModel.gitProviderId),
+            if (projectModel.gitProviderId != null) referenceCache.getReferenceItemById(projectModel.gitProviderId) else null
         )
     }
 
@@ -101,7 +101,7 @@ class BaseProjectService(
                     it.description,
                     it.createdDate,
                     referenceCache.getReferenceItemById(it.projectTypeId),
-                    referenceCache.getReferenceItemById(it.gitProviderId),
+                    if (it.gitProviderId != null) referenceCache.getReferenceItemById(it.gitProviderId) else null
                 )
             }
             .orElseThrow { CommonServiceException("WORKSPACE_SERVICE", "Project not found") }

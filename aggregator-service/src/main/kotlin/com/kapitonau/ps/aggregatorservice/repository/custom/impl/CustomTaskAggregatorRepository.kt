@@ -88,7 +88,7 @@ where w.workspace_id = :workspaceId
        ta.member_status_id as assigneeStatusId,
        t.created_date       as creadedDate,
        t.last_modified_date as lastModifiedDate,
-       p.git_provider_id as gitProviderId,
+       p.git_provider_id as gitProviderId
 from tasks t
          join projects p on p.project_id = t.project_id
          join workspaces w on w.workspace_id = t.workspace_id and w.workspace_id = p.workspace_id
